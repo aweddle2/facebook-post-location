@@ -14,5 +14,11 @@ class SpacyTests(unittest.TestCase):
         self.assertEqual("150", post2.costs[0].text)
         self.assertEqual("MONEY", post2.costs[0].label_)
 
+        post3 = GetEntities("We stayed at the East Charlton Hotel in Charlton Victoria, on the Calder Hwy between Melbourne and Mildura. Rooms are $55 per night and clean. Bathroom was very clean. There is an undercover area out the back where you can park your bikes. Hosts are great and the meals are very good.")
+        self.assertEqual("the East Charlton Hotel", post3.locations[0].text)
+        self.assertEqual("FAC", post3.locations[0].label_)
+        self.assertEqual("55", post3.costs[0].text)
+        self.assertEqual("MONEY", post3.costs[0].label_)
+
 if __name__ == '__main__':
     unittest.main()
