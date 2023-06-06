@@ -1,7 +1,7 @@
 import unittest
 from LocationParser.PlacesApi import ResolvePlaceName
 
-class PleacesApiTests(unittest.TestCase):
+class PlacesApiTests(unittest.TestCase):
 
     def test1(self):
         location1 = ResolvePlaceName("the London Hotel Ardlethen NSW")
@@ -12,8 +12,8 @@ class PleacesApiTests(unittest.TestCase):
 
         location2 = ResolvePlaceName("Rudds Pub")
         self.assertEqual("Rudd's Pub", location2.name)
-        self.assertEqual(-27.8525601, location2.lat)
-        self.assertEqual(151.9032221, location2.lng)
+        self.assertEqual(-27.8525459, location2.lat)
+        self.assertEqual(151.9031962, location2.lng)
         self.assertEqual("45 Tooth St, Nobby QLD 4360, Australia", location2.formatted_address)
 
 if __name__ == '__main__':

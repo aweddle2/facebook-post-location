@@ -4,8 +4,8 @@ import json
 from LocationParser.Config import Config
 
 def ResolvePlaceName(text):
-    waffle = Config()
-    apiKey = waffle.Config['GoogleApi']['PlacesApiKey']
+    conf = Config()
+    apiKey = conf.Config['GoogleApi']['PlacesApiKey']
 
     url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="+text+"%20Australia&inputtype=textquery&fields=formatted_address%2Cname%2Cgeometry&key="+apiKey
 

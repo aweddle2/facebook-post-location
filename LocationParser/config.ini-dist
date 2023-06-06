@@ -1,4 +1,5 @@
 [GoogleApi]
 PlacesApiKey: <PlacesApiKey>
 
-
+[Facebook]
+UserAccessToken: <UserAccessToken>
