@@ -2,4 +2,6 @@
 PlacesApiKey: <PlacesApiKey>
 
 [Facebook]
+UserID: <UserID>>
 UserAccessToken: <UserAccessToken>
+GroupID: <GroupID>
