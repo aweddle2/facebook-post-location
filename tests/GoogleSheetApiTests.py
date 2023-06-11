@@ -1,5 +1,5 @@
 import unittest
-from LocationParser.GoogleSheetApi import Append
+from FacebookPostLocation.GoogleSheetApi import Append
 
 
 class PlacesApiTests(unittest.TestCase):

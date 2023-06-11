@@ -1,20 +1,23 @@
 # May replace this with the entire Python Library, but for now it's just one API call
 import requests
 import json
-from LocationParser.Config import Config
+from FacebookPostLocation.Config import Config
+
 
 def ResolvePlaceName(text):
     conf = Config()
     apiKey = conf.Config['GoogleApi']['PlacesApiKey']
 
-    url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="+text+"%20Australia&inputtype=textquery&fields=formatted_address%2Cname%2Cgeometry&key="+apiKey
+    url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="+text + \
+        "%20Australia&inputtype=textquery&fields=formatted_address%2Cname%2Cgeometry&key="+apiKey
 
-    payload={}
+    payload = {}
     headers = {}
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
     return GooglePlacesResponse.from_json(json.loads(response.text))
+
 
 class GooglePlacesResponse:
     def __init__(self, formatted_address, lat, lng, name):
@@ -39,12 +42,14 @@ class GooglePlacesResponse:
 
     def to_json(self):
         return self.__str__()
-    
+
     @staticmethod
     def from_json(json_dct):
-      # TODO error checking needed here.
-      return GooglePlacesResponse(json_dct['candidates'][0]['formatted_address'],
-                   json_dct['candidates'][0]['geometry']['location']['lat'],
-                   json_dct['candidates'][0]['geometry']['location']['lng'],
-                   json_dct['candidates'][0]['name']
-            )
+        if (len(json_dct['candidates']) == 0):
+            return None
+        # TODO error checking needed here.
+        return GooglePlacesResponse(json_dct['candidates'][0]['formatted_address'],
+                                    json_dct['candidates'][0]['geometry']['location']['lat'],
+                                    json_dct['candidates'][0]['geometry']['location']['lng'],
+                                    json_dct['candidates'][0]['name']
+                                    )
