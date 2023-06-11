@@ -40,7 +40,7 @@ def update_data(service, body):
     conf = Config()
     spreadsheetId = conf.Config['GoogleApi']['SpreadsheetId']
 
-    service.spreadsheets().values().update(
+    return service.spreadsheets().values().append(
         spreadsheetId=spreadsheetId, range="A:Z",
         valueInputOption="USER_ENTERED", body=json.loads(body)).execute()
 
