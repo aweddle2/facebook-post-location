@@ -1,21 +1,45 @@
 from FacebookPostLocation.Config import Config
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
+from GoogleDriveApi import FileExists, Move
 
 hiddenSheetName = "LOOKUP_SHEET"
+
+
+def CreateIfNotExist(title):
+
+    id = FileExists(title)
+    if (id > -1):
+        return id
+
+    googleSheetsService = AuthenticateAndBuildGoogleSheetsService()
+
+    spreadsheet = {
+        'properties': {
+            'title': title
+        },
+        "sheets": [
+            {
+                'properties': {
+                    'title': 'Data'
+                },
+            }
+        ],
+    }
+    spreadsheet = googleSheetsService.spreadsheets().create(body=spreadsheet,
+                                                            fields='spreadsheetId').execute()
+
+    Move(spreadsheet.get('spreadsheetId'))
+
+    return spreadsheet.get('spreadsheetId')
 
 
 def Append(values: list):
 
     conf = Config()
-    serviceAccountKeyFileLocation = conf.Config['GoogleApi']['ServiceAccountKeyFileLocation']
     spreadsheetId = conf.Config['GoogleApi']['SpreadsheetId']
 
-    # Authenticate and construct service.
-    credentials = service_account.Credentials.from_service_account_file(
-        serviceAccountKeyFileLocation)
-    service = build('sheets', 'v4', credentials=credentials)
+    service = AuthenticateAndBuildGoogleSheetsService()
 
     # See of the search sheet exists and create if not
     ranges = [hiddenSheetName+"!A1:B1"]
@@ -50,3 +74,14 @@ def Append(values: list):
         service.spreadsheets().values().append(
             spreadsheetId=spreadsheetId, range="Data!A:A",
             valueInputOption="USER_ENTERED", body={'values': [values]}).execute()
+
+
+def AuthenticateAndBuildGoogleSheetsService():
+    # Authenticate and construct service.
+    conf = Config()
+    serviceAccountKeyFileLocation = conf.Config['GoogleApi']['ServiceAccountKeyFileLocation']
+
+    credentials = service_account.Credentials.from_service_account_file(
+        serviceAccountKeyFileLocation)
+
+    return build('sheets', 'v4', credentials=credentials)
