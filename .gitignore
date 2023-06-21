@@ -1,5 +1,6 @@
 #ini file
 FacebookPostLocation/config.ini
+google_auth.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
