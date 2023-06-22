@@ -1,7 +1,7 @@
 from FacebookPostLocation.Config import Config
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
-from GoogleDriveApi import FileExists, Move
+from FacebookPostLocation.GoogleDriveApi import FileExists, Move
 
 hiddenSheetName = "LOOKUP_SHEET"
 
@@ -22,6 +22,12 @@ def CreateIfNotExist(title):
             {
                 'properties': {
                     'title': 'Data'
+                },
+            },
+            {
+                'properties': {
+                    "hidden": True,
+                     "title": hiddenSheetName
                 },
             }
         ],

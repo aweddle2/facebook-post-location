@@ -4,10 +4,16 @@ from LocationParser import GetEntities
 from GoogleSheetApi import Append
 from PlacesApi import ResolvePlaceName
 
+def Process():
+    #get all the groups from the master sheet
+    #get the last processed date from the row
+    #process facebook posts from that timestamp until now
 
-def Process(startDate: datetime, endDate: datetime):
-    if (startDate is None):
-        startDate = datetime.now() - timedelta(days=7)
+
+
+  ProcessGroup(date: datetime):
+    if (date is None):
+        date = datetime.now() - timedelta(days=7)
         endDate = datetime.now()
 
     facebookPosts = GetPosts()
@@ -31,5 +37,4 @@ def Process(startDate: datetime, endDate: datetime):
                       resolvedLocation.lat, resolvedLocation.lng, cost, facebookPost.permalink_url]
             Append(values)
 
-
-Process(None, None)
+Process()

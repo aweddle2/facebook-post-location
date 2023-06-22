@@ -14,6 +14,10 @@ def FileExists(fileName):
     # call drive api client
     googleDriveService = AuthenticateAndBuildGoogleDriveService()
 
+    result = googleDriveService.files().list(q="",
+                                             fields='files(driveId, name)',
+                                             pageToken=None).execute()
+
     # Retrieve the existing parents to remove
     response = googleDriveService.files().list(q="name = '"+fileName+"' and parents in '"+dataFolderId+"'",
                                                spaces='drive',
@@ -42,7 +46,6 @@ def Move(fileName):
     file = googleDriveService.files().update(fileId=fileName, addParents=dataFolderId,
                                              removeParents=previous_parents,
                                              fields='id, parents').execute()
-
 
 def AuthenticateAndBuildGoogleDriveService():
     # Authenticate and construct service.

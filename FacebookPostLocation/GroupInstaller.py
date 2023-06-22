@@ -69,6 +69,3 @@ def AuthenticateAndBuildService():
         serviceAccountKeyFileLocation)
 
     return build('sheets', 'v4', credentials=credentials)
-
-
-Install("Andrew Test Group", "123546789")
