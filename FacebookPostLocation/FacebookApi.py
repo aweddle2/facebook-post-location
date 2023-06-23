@@ -1,25 +1,41 @@
 # May replace this with the Facebook Library, but for now it's just one API call
+from datetime import datetime
 import requests
 import json
 from FacebookPostLocation.Config import Config
 
-# TODO Pagination and date ranges.  If this is going to run scheduled then it needs to support timestamps
+date_format = '%Y-%m-%dT%H:%M:%S'
 
 
-def GetPosts():
+def GetPosts(facebookGroupID, startDate: datetime, endDate: datetime):
     conf = Config()
-    groupId = conf.Config['Facebook']['GroupID']
     accessToken = conf.Config['Facebook']['UserAccessToken']
 
-    url = "https://graph.facebook.com/"+groupId + \
-        "/feed?fields=permalink_url,message&access_token="+accessToken
+    url = "https://graph.facebook.com/"+facebookGroupID + \
+        "/feed?fields=permalink_url,message&access_token=" + \
+        accessToken + "&since=" + \
+        startDate.strftime(date_format) + "&until=" + \
+        endDate.strftime(date_format)
+
+    return GetPageOfResults(url)
+
+
+def GetPageOfResults(url):
 
     payload = {}
     headers = {}
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
-    return FacebookGroupFeedResponse.from_json(json.loads(response.text)).posts
+    pageOfResults = FacebookGroupFeedResponse.from_json(
+        json.loads(response.text))
+
+    posts = pageOfResults.posts
+
+    if (pageOfResults.paging):
+        posts = posts + GetPageOfResults(pageOfResults.paging.next)
+
+    return posts
 
 
 class FacebookGroupFeedResponse:
@@ -27,7 +43,9 @@ class FacebookGroupFeedResponse:
         self.posts = []
         for item in data:
             self.posts.append(FacebookPost.from_json(item))
-        self.paging = FacebookPagination.from_json(paging)
+        self.paging = None
+        if (paging is not None):
+            self.paging = FacebookPagination.from_json(paging)
 
     def __iter__(self):
         yield from {
@@ -46,8 +64,10 @@ class FacebookGroupFeedResponse:
 
     @staticmethod
     def from_json(json_dct):
-        # TODO error checking needed here.
-        return FacebookGroupFeedResponse(json_dct['data'], json_dct['paging'])
+        paging = None
+        if "paging" in json_dct:
+            paging = json_dct['paging']
+        return FacebookGroupFeedResponse(json_dct['data'], paging)
 
 
 class FacebookPost:

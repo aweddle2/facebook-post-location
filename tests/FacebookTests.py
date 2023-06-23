@@ -1,18 +1,20 @@
 import unittest
 from FacebookPostLocation.FacebookApi import GetPosts
+from datetime import datetime, timedelta
 
 
 class FacebookApiTests(unittest.TestCase):
 
     def test1(self):
-        postResponse = GetPosts()
+        startDate = datetime.strptime("2023-06-10", "%Y-%m-%d")
+        endDate = datetime.strptime("2023-06-23", "%Y-%m-%d")
 
-        self.assertEqual("https://www.facebook.com/groups/1252515138743868/permalink/1254050395257009/",
-                         postResponse.posts[0].permalink_url)
-        self.assertEqual("post 3", postResponse.posts[0].message)
-        self.assertEqual("https://www.facebook.com/groups/1252515138743868/permalink/1252516325410416/",
-                         postResponse.posts[1].permalink_url)
-        self.assertEqual("Post 2", postResponse.posts[1].message)
+        posts = GetPosts(
+            '1252515138743868', startDate, endDate)
+
+        self.assertEqual("https://www.facebook.com/groups/1252515138743868/permalink/1257067724955276/",
+                         posts[0].permalink_url)
+        self.assertEqual(4, len(posts))
 
 
 if __name__ == '__main__':
