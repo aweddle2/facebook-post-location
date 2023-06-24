@@ -75,6 +75,3 @@ def AuthenticateAndBuildService():
         serviceAccountKeyFileLocation)
 
     return build('sheets', 'v4', credentials=credentials)
-
-
-Process()
