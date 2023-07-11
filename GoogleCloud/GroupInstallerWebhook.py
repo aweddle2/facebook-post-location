@@ -1,6 +1,6 @@
 import functions_framework
 import json
-from FacebookPostLocation.GroupInstaller import Install
+from ..FacebookPostLocation.GroupInstaller import Install
 
 
 @functions_framework.http
