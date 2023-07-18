@@ -1,1 +1,4 @@
 functions-framework==3.*
+google-api-python-client==2.88.0
+google-auth==2.22.0
+spacy=3.6.0
