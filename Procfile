@@ -1,1 +1,1 @@
-web: python ./GoogleCloud/GroupInstallerWebhook.py
+web: python ./GroupInstallerWebhook.py
